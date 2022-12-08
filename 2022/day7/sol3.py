@@ -34,6 +34,11 @@ class Node:
                 size += child.get_size()
         return size
 
+    def find(self, required, smallest):
+        for child in self.children:
+            if required <= child.get_size() < smallest:
+                smallest = child.find(required, child.get_size())
+        return smallest
 
     def __repr__(self):
         return self.children
@@ -62,6 +67,16 @@ def solution():
                 else:
                     curr.add_child(Node(second, int(first), curr))
     
-    print(root.sum())
+    print("P1: ", root.sum())
+    
+    # Part 2
+    space = 70_000_000
+    update_space = 30_000_000
+    req = update_space - (space - root.get_size())
+
+    root = root.children[0]
+
+    print("P2: ",root.find(req, root.get_size()))
+
 
 solution()
