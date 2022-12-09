@@ -8,7 +8,6 @@ directions = {
     'D': (1, 0),
 }
 
-
 def move_head(knot, dir):
     tmp = list(knot)
     tmp[0] += directions[dir][0]
@@ -23,61 +22,73 @@ def move_tail(knot, tup):
     return tuple(tmp)
 
 
+def get_dist(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
+    return math.sqrt(((x1-x2)**2) + ((y1-y2)**2))
+
+
+def print_map(knots):
+    w, h = (50, 40)
+    map = []
+    for row in range(h):
+        map.append(['.' for _ in range(w)])
+
+    for i, knot in enumerate(knots):
+        x, y = knot
+        map[x][y] = str(i) if i != 0 else 'H'
+    for row in map:
+        for col in row:
+            print(col, end="")
+        print()
+
+
+def move(head, tail):
+    dx = head[0] - tail[0]
+    dy = head[1] - tail[1]
+
+    if abs(dx) <= 1 and abs(dy) <= 1:
+        return tail
+    elif abs(dx) >= 2 and abs(dy) >= 2:
+        tail = (head[0]-1 if tail[0]<head[0] else head[0]+1,
+                head[1]-1 if tail[1]<head[1] else head[1]+1)
+    elif abs(dx) >= 2:
+        tail = (head[0]-1 if tail[0]<head[0] else head[0]+1, head[1])
+    elif abs(dy) >= 2:
+        tail = (head[0], head[1]-1 if tail[1]<head[1] else head[1]+1)
+    return tail
+
+
 def solution(data, n):
 
-    # Initial state
-    T = [0, 0]
-    S = [0, 0]
-    H = [0, 0]
-
-    knots = [(0, 0) for _ in range(n)]
+    knots = [(25, 10) for _ in range(n)]
 
     visited = set()
 
-    visited.add((T[0], T[1]))
-
-    positions = [
-        (0, 1),  # right,
-        (0, -1),  # left
-        (1, 0),  # down
-        (-1, 0),  # up
-        (1, 1),  # down right
-        (1, -1),  # down left
-        (-1, 1),  # up right
-        (-1, -1)  # up left
-    ]
-
-    def get_dist(p1, p2):
-        x1, y1 = p1
-        x2, y2 = p2
-        return math.sqrt(((x1-x2)**2) + ((y1-y2)**2))
+    visited.add(knots[-1])
 
     for dir, n_steps in data:
 
         for i in range(n_steps):
             knots[0] = move_head(knots[0], dir)
-            if get_dist(knots[0], knots[-1]) > math.sqrt(2):
-                # Try all 8 directions around
-                # T and pick the one where dist is < 1
-                # # but not 0
-                for position in positions:
-                    row_incr, col_incr = position
+            
+            # then update rest of tails
+            for i in range(1, len(knots)):
+                knots[i] = move(knots[i-1], knots[i])
 
-                    tmp_pos = [knots[-1][0] + row_incr,
-                               knots[-1][1] + col_incr]
+            #print(dir, i)
+            #print_map(knots)
+            #input()
+            visited.add(knots[-1])
 
-                    if get_dist(tmp_pos, knots[0]) == 1.0:
-                        knots[-1] = move_tail(knots[-1], (row_incr, col_incr))
-                        visited.add(knots[-1])
-                        break
-
-    print("Part 1: ", len(visited))
+    return len(visited)
 
 
-with Path('test.in').open('r') as f:
+with Path('input.in').open('r') as f:
     # converts ['R', '4'] into ('R', 4) for each line
     data = [tuple([line.strip().split()[0],
                    int(line.strip().split()[1])])
             for line in f.readlines()]
 
-solution(data, 2)
+print("p1:", solution(data, 2))
+print("p2:", solution(data, 10))
