@@ -15,13 +15,6 @@ def move_head(knot, dir):
     return tuple(tmp)
 
 
-def move_tail(knot, tup):
-    tmp = list(knot)
-    tmp[0] += tup[0]
-    tmp[1] += tup[1]
-    return tuple(tmp)
-
-
 def print_map(knots):
     w, h = (50, 40)
     map = []
