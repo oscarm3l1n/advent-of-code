@@ -23,12 +23,13 @@ def get_nums(s):
         y = 10 * y + int(ch)
     return x, y
 
+
 ans = 0
 for i in range(len(D)):
     if D[i:].startswith("mul"):
-        x, y = get_nums(D[i+len("mul")+1:])
-        ans += x*y
-print("p1",ans)
+        x, y = get_nums(D[i + len("mul") + 1 :])
+        ans += x * y
+print("p1", ans)
 
 ans = 0
 i = 0
@@ -44,4 +45,4 @@ while i < len(D):
         ans += x * y
     i += 1
 
-print("p2",ans)
+print("p2", ans)
