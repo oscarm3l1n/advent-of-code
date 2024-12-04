@@ -41,15 +41,27 @@ for r in range(R):
                 rr = r + d[i][0]
                 cc = c + d[i][1]
                 if 0 <= rr < R and 0 <= cc < C and G[rr][cc] == 'XMAS'[i]:
-                    t.append((rr,cc))
                     continue
                 ok = False
                 break
             if ok:
                 ans += 1
 
-print(ans)
+print("p1", ans)
 
+ans = 0
+for r in range(R):
+    for c in range(C):
+        if r+2<R and c+2<C and G[r][c] == 'M' and  G[r+1][c+1] == 'A' and G[r+2][c+2] == 'S' and G[r+2][c] == 'M' and G[r][c+2] == 'S':
+            ans += 1
+        if r+2<R and c+2<C and G[r][c] == 'S' and  G[r+1][c+1] == 'A' and G[r+2][c+2] == 'M' and G[r+2][c] == 'S' and G[r][c+2] == 'M':
+            ans += 1
+        if r+2<R and c+2<C and G[r][c] == 'S' and  G[r+1][c+1] == 'A' and G[r+2][c+2] == 'M' and G[r+2][c] == 'M' and G[r][c+2] == 'S':
+            ans += 1
+        if r+2<R and c+2<C and G[r][c] == 'M' and  G[r+1][c+1] == 'A' and G[r+2][c+2] == 'S' and G[r+2][c] == 'S' and G[r][c+2] == 'M':
+            ans += 1
+
+print("p2", ans)
 
 
 
