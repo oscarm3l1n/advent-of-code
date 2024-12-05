@@ -5,7 +5,7 @@ with open(sys.argv[1]) as f:
     D = f.read().strip()
 
 
-lines = D.split("\n")
+lines = D.split('\n')
 
 
 def rule1(nums):
@@ -29,7 +29,7 @@ for line in lines:
     safe = is_ok(nums)
     if safe:
         ans += 1
-print("p1", ans)
+print('p1', ans)
 
 ans = 0
 for line in lines:
@@ -45,4 +45,4 @@ for line in lines:
         nums.insert(i, removed)
     if any(tries):
         ans += 1
-print("p2", ans)
+print('p2', ans)

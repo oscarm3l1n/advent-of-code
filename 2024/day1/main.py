@@ -2,7 +2,7 @@ import sys
 from collections import defaultdict
 
 D = open(sys.argv[1]).read().strip()
-lines = D.split("\n")
+lines = D.split('\n')
 lst1, lst2 = [], []
 C = defaultdict(int)
 
@@ -18,9 +18,9 @@ lst2 = sorted(lst2)
 ans = 0
 for x, y in zip(lst1, lst2):
     ans += abs(x - y)
-print(f"p1 {ans=}")
+print(f'p1 {ans=}')
 
 ans = 0
 for x in lst1:
     ans += x * C[x]
-print(f"p2 {ans=}")
+print(f'p2 {ans=}')

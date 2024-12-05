@@ -5,24 +5,24 @@ with open(sys.argv[1]) as f:
     D = f.read().strip()
 
 
-lines = D.split("\n\n")[0]
-lines = lines.split("\n")
+lines = D.split('\n\n')[0]
+lines = lines.split('\n')
 left = defaultdict(list[int])
 right = defaultdict(list[int])
 
 
 for line in lines:
-    d = line.split("|")
+    d = line.split('|')
     le, ri = int(d[0]), int(d[1])
     left[le].append(ri)
     right[ri].append(le)
 
-lines = D.split("\n\n")[-1].split("\n")
+lines = D.split('\n\n')[-1].split('\n')
 
 inc = []
 ans = 0
 for line in lines:
-    xs = [int(x) for x in line.split(",")]
+    xs = [int(x) for x in line.split(',')]
     ok = True
     for i in range(len(xs)):
         curr = xs[i]
@@ -36,7 +36,7 @@ for line in lines:
     if ok:
         ans += xs[len(xs) // 2]
 assert ans == 5374
-print("p1", ans)
+print('p1', ans)
 
 ans = 0
 for k in range(len(inc)):
@@ -49,4 +49,4 @@ for k in range(len(inc)):
                 xs[i] = tmp
     ans += xs[len(xs) // 2]
 assert ans == 4260
-print("p2", ans)
+print('p2', ans)
