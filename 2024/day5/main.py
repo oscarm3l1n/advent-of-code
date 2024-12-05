@@ -7,15 +7,15 @@ with open(sys.argv[1]) as f:
 
 lines = D.split('\n\n')[0]
 lines = lines.split('\n')
-left = defaultdict(list[int])
-right = defaultdict(list[int])
+left = defaultdict(set[int])
+right = defaultdict(set[int])
 
 
 for line in lines:
     d = line.split('|')
     le, ri = int(d[0]), int(d[1])
-    left[le].append(ri)
-    right[ri].append(le)
+    left[le].add(ri)
+    right[ri].add(le)
 
 lines = D.split('\n\n')[-1].split('\n')
 
