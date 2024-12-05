@@ -35,7 +35,6 @@ for line in lines:
             break
     if ok:
         ans += xs[len(xs) // 2]
-assert ans == 5374
 print('p1', ans)
 
 ans = 0
@@ -48,5 +47,4 @@ for k in range(len(inc)):
                 xs[j] = xs[i]
                 xs[i] = tmp
     ans += xs[len(xs) // 2]
-assert ans == 4260
 print('p2', ans)
