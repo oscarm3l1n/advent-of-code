@@ -13,11 +13,11 @@ start = None
 start_r, start_c = 0, 0
 for r in range(R):
     for c in range(C):
-        if G[r][c] == "^":
+        if G[r][c] == '^':
             start_r, start_c = r, c
 
 # r c dr dc
-do = (1,0)
+do = (1, 0)
 up = (-1, 0)
 le = (0, -1)
 ri = (0, 1)
@@ -26,11 +26,11 @@ ans = 0
 seen = set()
 while Q:
     r, c, dr, dc = Q.popleft()
-    rr, cc = r+dr, c+dc
-    seen.add((r,c))
-    if not (0<=rr<R and 0<=cc<C):
+    rr, cc = r + dr, c + dc
+    seen.add((r, c))
+    if not (0 <= rr < R and 0 <= cc < C):
         break
-    if G[rr][cc] == "#":
+    if G[rr][cc] == '#':
         # change direction
         if (dr, dc) == up:
             dr, dc = ri
@@ -40,34 +40,34 @@ while Q:
             dr, dc = do
         elif (dr, dc) == do:
             dr, dc = le
-    rr, cc = r+dr, c+dc
-    if 0 <= rr < R and 0<=cc<C:
+    rr, cc = r + dr, c + dc
+    if 0 <= rr < R and 0 <= cc < C:
         Q.append((rr, cc, dr, dc))
-print("p1", len(seen))
+print('p1', len(seen))
 
 
 ans = 0
 for _r in range(R):
     for _c in range(C):
-        d=0
+        d = 0
         seen = set()
         Q = deque([(start_r, start_c, 0)])
         while Q:
             r, c, d = Q.popleft()
-            if (r,c,d) in seen:
+            if (r, c, d) in seen:
                 ans += 1
                 break
-            seen.add((r,c,d))
-            
-            dr, dc = [up, ri, do, le][d]
-            rr, cc = r+dr, c+dc
+            seen.add((r, c, d))
 
-            if not (0<=rr<R and 0<=cc<C):
+            dr, dc = [up, ri, do, le][d]
+            rr, cc = r + dr, c + dc
+
+            if not (0 <= rr < R and 0 <= cc < C):
                 break
-            if G[rr][cc] == "#" or ((rr, cc) == (_r, _c)):
-                d = (d+1)%4
+            if G[rr][cc] == '#' or ((rr, cc) == (_r, _c)):
+                d = (d + 1) % 4
                 rr = r
                 cc = c
-            if 0 <= rr < R and 0<=cc<C:
+            if 0 <= rr < R and 0 <= cc < C:
                 Q.append((rr, cc, d))
-print("p2", ans)
+print('p2', ans)
