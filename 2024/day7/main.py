@@ -8,23 +8,22 @@ with open(sys.argv[1]) as f:
 
 lines = D.split('\n')
 
+
 def _f(target, lst):
-    if len(lst)==1:
+    if len(lst) == 1:
         return next(iter(lst)) == target
-    if _f(target, [int(str(lst[0])+str(lst[1]))] + lst[2:]):
+    if _f(target, [int(str(lst[0]) + str(lst[1]))] + lst[2:]):
         return True
-    if _f(target, [lst[0]*lst[1]] + lst[2:]):
+    if _f(target, [lst[0] * lst[1]] + lst[2:]):
         return True
-    if _f(target, [lst[0]+lst[1]] + lst[2:]):
+    if _f(target, [lst[0] + lst[1]] + lst[2:]):
         return True
-
-
 
 
 correct = []
 ans = 0
-for i,line in enumerate(lines):
-    print(f"{i=} of {len(lines)}")
+for i, line in enumerate(lines):
+    print(f'{i=} of {len(lines)}')
     Y, xs = line.split(':')
     Y = int(Y)
     xs = [int(x) for x in xs.split()]
