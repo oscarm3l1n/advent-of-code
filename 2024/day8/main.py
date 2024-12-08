@@ -37,7 +37,34 @@ for ch in M:
 print("p1", len(nodes))
 
 
+nodes = set()
+for ch in M:
+    pts = [p for p in M[ch]]
+    for i in range(len(pts)):
+        for j in range(len(pts)):
+            if i == j:
+                continue
+            p1 = pts[i]
+            p2 = pts[j]
+            dr = p1[0]-p2[0]
+            dc = p1[1]-p2[1]
+            K = 0
+            while True:
+                rr = p1[0]+(K*dr)
+                cc = p1[1]+(K*dc)
+                if 0<=rr<R and 0<=cc<C:
+                    nodes.add((rr,cc))
+                    K+=1
+                    continue
+                break
 
+for r in range(R):
+    for c in range(C):
+        if (r,c) in nodes:
+            print("#",end="")
+        else:
+            print(G[r][c],end="")
+    print()
 
-
+print("p2", len(nodes)) 
 
