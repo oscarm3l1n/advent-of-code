@@ -5,7 +5,7 @@ from typing import reveal_type
 with open(sys.argv[1]) as f:
     D = f.read().strip()
 
-free_space=False
+free_space = False
 print(D)
 idx = 0
 s = []
@@ -21,29 +21,36 @@ for ch in D:
         for i in range(ch):
             s.append(str(idx))
         ss.append((str(idx), ch))
-        idx+=1
+        idx += 1
     free_space = not free_space
 
+
 def pr(s):
-    for ch,size in s:
-        print(ch*size,end='')
+    for ch, size in s:
+        print(ch * size, end='')
     print()
+
+
 pr(ss)
+
 
 class Block:
     def __init__(self, tup):
         self.tup = tup
+
     @property
     def size(self):
         return self.tup[1]
+
     @property
     def char(self):
         return self.tup[0]
+
     def __repr__(self) -> str:
         return f'Block(char={self.char}, size={self.size})'
 
 
-i = len(ss)-1
+i = len(ss) - 1
 while i >= 0:
     print(i)
     back = Block(ss[i])
@@ -53,20 +60,20 @@ while i >= 0:
             if i < j:
                 break
             if back.size < front.size and front.char == '.':
-                #print('reverse is smaller than front')
+                # print('reverse is smaller than front')
                 # remove old pos
                 ss.pop(j)
                 # insert new block
                 ss.insert(j, (back.char, back.size))
                 # insert empty block
-                ss.insert(j+1, ('.', front.size - back.size))
+                ss.insert(j + 1, ('.', front.size - back.size))
                 # remove old block
-                ss.pop(i+1)
+                ss.pop(i + 1)
                 # insert dots at old pos
-                ss.insert(i+1, ('.', back.size))
+                ss.insert(i + 1, ('.', back.size))
                 break
             elif back.size == front.size and front.char == '.':
-                #print('back == front')
+                # print('back == front')
                 # remove old block
                 ss.pop(j)
                 # insert new block
@@ -87,9 +94,5 @@ for x in ss:
 ans = 0
 for i in range(len(lst)):
     if lst[i] != '.':
-        ans += i*int(lst[i])
-print("p2", ans)
-
-
-
-
+        ans += i * int(lst[i])
+print('p2', ans)
