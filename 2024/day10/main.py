@@ -1,5 +1,5 @@
 import sys
-from collections import deque, defaultdict
+from collections import deque
 
 with open(sys.argv[1], 'r') as f:
     D = f.read().strip()
@@ -19,7 +19,7 @@ for r in range(R):
         if G[r][c] == '9':
             starts.append((r, c))
         if G[r][c] == '0':
-            ends.append((r,c))
+            ends.append((r, c))
 
 
 def bfs(pos):
@@ -34,7 +34,7 @@ def bfs(pos):
         if G[r][c] == '0':
             ans += 1
 
-        for dr,dc in [(0,1), (0,-1), (1,0), (-1,0)]:
+        for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             rr = r + dr
             cc = c + dc
             if (
@@ -46,18 +46,23 @@ def bfs(pos):
                 Q.append((rr, cc))
     return ans
 
-def f(r,c):
+
+def _f(r, c):
     if G[r][c] == '9':
         return 1
     ans = 0
-    for dr,dc in [(0,1), (0,-1), (1,0), (-1,0)]:
-        rr = r+dr
-        cc = c+dc
-        if 0<=rr<R and 0<=cc<C and G[rr][cc] != '.' and int(G[rr][cc]) == int(G[r][c])+1:
-            ans += f(rr,cc)
+    for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+        rr = r + dr
+        cc = c + dc
+        if (
+            0 <= rr < R
+            and 0 <= cc < C
+            and G[rr][cc] != '.'
+            and int(G[rr][cc]) == int(G[r][c]) + 1
+        ):
+            ans += _f(rr, cc)
     return ans
 
-    
 
 ans = 0
 for start in starts:
@@ -66,5 +71,5 @@ print(ans)
 
 ans = 0
 for end in ends:
-    ans += f(*end)
+    ans += _f(*end)
 print(ans)
