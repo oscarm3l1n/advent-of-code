@@ -37,17 +37,33 @@ def bfs(target, pos):
             else:
                 perim += 1
                 perims.add((rr, cc, dr, dc))
-                if any(
-                    [
-                        (rr, cc - 1, dr, dc) in perims,
-                        (rr, cc + 1, dr, dc) in perims,
-                        (rr - 1, cc, dr, dc) in perims,
-                        (rr + 1, cc, dr, dc) in perims,
-                    ]
-                ):
-                    pass
-                else:
-                    perim2 += 1
+                if dr != 0:
+                    # moving rows
+                    if not any(
+                        [
+                            (rr, cc - 1, dr, dc) in perims,
+                            (rr, cc + 1, dr, dc) in perims,
+                        ]
+                    ):
+                        perim2 += 1
+                elif dc != 0:
+                    if not any(
+                        [
+                            (rr - 1, cc, dr, dc) in perims,
+                            (rr + 1, cc, dr, dc) in perims,
+                        ]
+                    ):
+                        perim2 += 1
+
+                # if any([
+                #    (rr, cc-1, dr, dc) in perims,
+                #    (rr, cc+1, dr, dc) in perims,
+                #    (rr-1, cc, dr, dc) in perims,
+                #    (rr+1, cc, dr, dc) in perims,
+                #    ]):
+                #        pass
+                # else:
+                #    perim2 += 1
 
     return seen, len(seen), perim, perims, perim2
 
@@ -63,7 +79,7 @@ for r in range(R):
         S, a, p, perims, perim2 = bfs(ch, (r, c))
         seen |= S
         ans += a * p
-        print(f'{ch=} {a=} {perim2=}')
         p2 += a * perim2
 print('p1', ans)
 print('p2', p2)
+assert p2 == 902742, f'{p2=}'
