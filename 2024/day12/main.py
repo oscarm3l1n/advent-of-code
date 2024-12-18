@@ -19,9 +19,8 @@ tests = {'A': 4, 'B': 4, 'D': 4, 'E': 4, 'C': 8}
 def bfs(target, pos):
     Q = deque([(pos[0], pos[1])])
     seen = set()
-    perims = set()
+    perims = defaultdict(set)
     perim = 0
-    perim2 = 0
     while Q:
         r, c = Q.popleft()
         if (r, c) in seen:
@@ -36,38 +35,33 @@ def bfs(target, pos):
                 Q.append((rr, cc))
             else:
                 perim += 1
-                perims.add((rr, cc, dr, dc))
-                if dr != 0:
-                    # moving rows
-                    if not any(
-                        [
-                            (rr, cc - 1, dr, dc) in perims,
-                            (rr, cc + 1, dr, dc) in perims,
-                        ]
-                    ):
-                        perim2 += 1
-                elif dc != 0:
-                    if not any(
-                        [
-                            (rr - 1, cc, dr, dc) in perims,
-                            (rr + 1, cc, dr, dc) in perims,
-                        ]
-                    ):
-                        perim2 += 1
+                perims[dr,dc].add((rr,cc))
 
-                # if any([
-                #    (rr, cc-1, dr, dc) in perims,
-                #    (rr, cc+1, dr, dc) in perims,
-                #    (rr-1, cc, dr, dc) in perims,
-                #    (rr+1, cc, dr, dc) in perims,
-                #    ]):
-                #        pass
-                # else:
-                #    perim2 += 1
-
-    return seen, len(seen), perim, perims, perim2
+    return seen, len(seen), perim, perims
 
 
+def find_sides(perims):
+    sides = []
+    sides = 0
+    for dr, dc in perims:
+        seen = set()
+        curr_ps = perims[dr,dc] # set
+        for p in curr_ps:
+            if p in seen:
+                continue
+            Q = deque([p])
+            sides += 1
+            while Q:
+                r,c = Q.popleft()
+                if (r,c) in seen:
+                    continue
+                seen.add((r,c))
+                for dr, dc in DIRS:
+                    rr, cc = r+dr, c+dc
+                    if (rr,cc) in curr_ps:
+                        Q.append((rr,cc))
+    return sides
+                
 ans = 0
 p2 = 0
 seen = set()
@@ -76,10 +70,10 @@ for r in range(R):
         if (r, c) in seen:
             continue
         ch = G[r][c]
-        S, a, p, perims, perim2 = bfs(ch, (r, c))
+        S, a, p, perims = bfs(ch, (r, c))
         seen |= S
         ans += a * p
-        p2 += a * perim2
+        per2 = find_sides(perims)
+        p2 += a * per2
 print('p1', ans)
 print('p2', p2)
-assert p2 == 902742, f'{p2=}'
