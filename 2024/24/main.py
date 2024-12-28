@@ -1,41 +1,91 @@
 import sys
-from collections import deque
 
+sys.setrecursionlimit(10**6)
 with open(sys.argv[1], "r") as f:
     chunks = f.read().strip().split("\n\n")
+vals,regs = chunks
+g={}
+for ln in vals.split("\n"):
+    a,b = ln.split(": ")
+    b = int(b)
+    g[a] = b
+gd={}
+for ln in regs.split("\n"):
+    a,op,b,_,reg=ln.split()
+    gd[reg] = (a,op,b)
 
-lns = chunks[0].split("\n")
+gd["nnt"], gd["gws"] = gd["gws"], gd["nnt"]
+gd["z13"], gd["npf"] = gd["npf"], gd["z13"]
+gd["cph"], gd["z19"] = gd["z19"], gd["cph"]
+gd["hgj"], gd["z33"] = gd["z33"], gd["hgj"]
+print(",".join(sorted(list({
+    "nnt", "gws", "gws", "nnt",
+    "z13", "npf", "npf", "z13",
+    "cph", "z19", "z19", "cph",
+    "hgj", "z33", "z33", "hgj"}))))
 
-conns = {}
-for ln in lns:
-    conn, val = ln.split(": ")
-    conns[conn] = val == "1"
+def pprint(reg,d=0,maxdepth=3):
+    if d > maxdepth:
+        return
+    if reg in g:
+        print("  "*d + reg)
+    else:
+        a,op,b = gd[reg]
+        print("  "*d + reg +f" = {op} {a} {b}")
+        pprint(a, d+1, maxdepth)
+        pprint(b, d+1, maxdepth)
 
-lns = chunks[1].split("\n")
-should = set()
-change = True
-while change:
-    change = False
-    for ln in lns:
-        a, op, b, _, c = ln.split()
-        if c.startswith("z"):
-            should.add(c)
-        if a in conns and b in conns and c not in conns:
-            a, b = conns[a], conns[b]
+def evaluate(x,y, i, j):
+    gloc = g.copy()
+
+    #x00
+    xs = [f'x{i:02d}' for i in range(45)]
+    ys = [f'y{i:02d}' for i in range(45)]
+    for x in xs:
+        gloc[x] = 0
+    for y in ys:
+        gloc[y] = 0
+    key = f'y{j:02d}'
+    gloc[key] = 1
+    key = f'x{i:02d}'
+    gloc[key] = 1
+
+    def dfs(reg):
+        if reg not in gloc:
+            a,op,b = gd[reg]
+            left = dfs(a)
+            right = dfs(b)
             if op == "AND":
-                conns[c] = a and b
+                res = left & right
             elif op == "OR":
-                conns[c] = a or b
-            elif op == "XOR":
-                conns[c] = a != b
-            change = True
+                res = left | right
+            else:
+                res = left ^ right
+            gloc[reg] = res
+        return gloc[reg]
+
+    zouts = {}
+    for reg in gd.keys():
+        if reg.startswith("z"):
+            zouts[reg] = dfs(reg)
 
 
-zs = {k:v for k,v in conns.items() if k.startswith("z")}
-ans = 0
-for i,k in enumerate(sorted(zs)):
-    if zs[k]:
-        ans += 2**i
-print(ans)
+    zs = sorted([ch for ch in zouts if ch.startswith("z")])
+    s=""
+    for z in zs:
+        if zouts[z]:
+            s += "1"
+        else:
+            s+="0"
 
+    nx = "".join([ch for ch in reversed(s)])
+    nx = int(nx,2)
+    return nx
+
+for i in range(45):
+    for j in range(45):
+        x = (1 << i)
+        y = (1 << j)
+        if x+y != evaluate(x,y,i,j):
+            print(i,j)
 
